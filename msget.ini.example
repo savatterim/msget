@@ -1,0 +1,47 @@
+## Example configuration file for msget
+
+[ARCHIVE]
+# Directory in which msget archives the
+# stats files
+save_path = /srv/data/bibliodoc-stats/
+
+# Web url for stats file retrieval.
+# !WARNING!: sensible information!
+# Permissions of this file should
+# be 600 (with trusted owner)
+retrieve_url = https://example.com/
+
+[MAIL]
+# The subject of the email message
+# msget send to the library operator.
+# msget puts a space character followed
+# by the date string for today at the
+# end of the string stored in # this
+# option
+subject = Bibliodoc stats -
+
+# Sender of the aforementioned mail
+from = noreply@example.com
+
+# Recipient of the email message
+# (the library operator)
+to = pizza.margherita@example.com
+
+# SMTP server to be used for sending.
+# At the moment of writing auth is
+# not supported. Use sendmail of other
+# MTAs
+server = localhost
+
+## MAIL BODY: edit below ##
+###################################################
+# The email body can span multiple lines.
+# Lines subsequent to the first must be indented.
+body: Dear friend,
+
+    here come the stats.
+
+    Bye,
+
+    Pizza
+###################################################
