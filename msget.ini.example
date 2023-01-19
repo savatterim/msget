@@ -1,15 +1,43 @@
-## Example configuration file for msget
+## Example configuration file for msget v1.0.0.
+# Please, edit before use.
+
+[LOGIN]
+# The url of the login page
+login_url = https://example.com/
+# A valid path for a json file
+# used as payload for the login
+# POST request.
+# msget tries to complete empty
+# valued elements found in this
+# file, using the information
+# in the login page.
+# e.g. "__VIEWSTATEGENERATOR",
+# "__EVENTVALIDATION" ect.
+login_post_data_file = /some/path
 
 [ARCHIVE]
 # Directory in which msget archives the
 # stats files
-save_path = /srv/data/bibliodoc-stats/
+save_path = /some/path
 
 # Web url for stats file retrieval.
 # !WARNING!: sensible information!
 # Permissions of this file should
 # be 600 (with trusted owner)
 retrieve_url = https://example.com/
+
+# The directory in which the processing module
+# is found.
+# To use the processing function, this variable
+# must be defined to a valid directory path at
+# which you must put a file called
+# `msget_processing_function.py`
+# in which you must define a function called
+# `msget_processing_function`.
+# This function must get a valid StrinIO object as
+# its unique argument and must return another StrinIO
+# object containing the processed data.
+process_module_dir = /some/path/
 
 [MAIL]
 # The subject of the email message
