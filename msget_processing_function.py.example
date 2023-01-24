@@ -1,0 +1,31 @@
+## Example processing module file
+# for msget v1.0.0.
+# See msget.init.example for istructions.
+
+
+import csv
+from io import StringIO
+from datetime import datetime
+
+def msget_processing_function(io_string_download, time_now):
+    timestamp_fp = open("/var/lib/msget/timestamp", 'r')
+    timestamp = datetime.strptime(timestamp_fp.read(26),"%Y-%m-%d %H:%M:%S.%f")
+    timestamp_fp.close()
+
+    csv_reader = csv.reader(io_string_download.getvalue().splitlines(), dialect="excel")
+
+    io_string_csv = StringIO()
+    csv_writer = csv.writer(io_string_csv, dialect="excel")
+
+    headers = next(csv_reader)
+    csv_writer.writerow(["SEP=,"])
+    csv_writer.writerow(["NOTA: tempo ultimi dati scaricati {}.\nTempo dati attuali {}.".format(timestamp,time_now)])
+    csv_writer.writerow(headers)
+
+    for row in csv_reader:
+            if row[-1]:
+                if datetime.strptime(row[-1], "%d/%m/%Y %H:%M") > timestamp:
+                    csv_writer.writerow(row)
+
+    return io_string_csv
+
