@@ -1,0 +1,17 @@
+//// Login payload json for msget v1.0.0
+// This is just an example, please edit before use
+// and REMOVE THESE COMMENT LINES!!
+// Also, this file may contain sensible information
+// give proper ownership and file mod.
+// E.g. root,600
+{
+    "__EVENTTARGET": "",
+    "__EVENTARGUMENT": "",
+    "__VIEWSTATE": "",
+    "__VIEWSTATEGENERATOR": "",
+    "__EVENTVALIDATION": "",
+    "<LOGIN_USERNAME_ELEMENT>": "<USERNAME>",
+    "<LOGIN_PASSWORD_ELEMENT>": "<PASSWORD>",
+    "<SOME_OTHER_ELEMENT_1": "<ELEMENT_1_VALUE>",
+    "<SOME_OTHER_ELEMENT_2": "<ELEMENT_2_VALUE>"
+}
