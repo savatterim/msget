@@ -2,16 +2,11 @@
 # for msget v1.0.0.
 # See msget.init.example for istructions.
 
-
 import csv
 from io import StringIO
 from datetime import datetime
 
-def msget_processing_function(io_string_download, time_now):
-    timestamp_fp = open("/var/lib/msget/timestamp", 'r')
-    timestamp = datetime.strptime(timestamp_fp.read(26),"%Y-%m-%d %H:%M:%S.%f")
-    timestamp_fp.close()
-
+def msget_processing_function(io_string_download, timestamp, time_now):
     csv_reader = csv.reader(io_string_download.getvalue().splitlines(), dialect="excel")
 
     io_string_csv = StringIO()
@@ -24,7 +19,7 @@ def msget_processing_function(io_string_download, time_now):
 
     for row in csv_reader:
             if row[-1]:
-                if datetime.strptime(row[-1], "%d/%m/%Y %H:%M") > timestamp:
+                if datetime.strptime(row[-1], "%d/%m/%y, %H:%M") > timestamp:
                     csv_writer.writerow(row)
 
     return io_string_csv
