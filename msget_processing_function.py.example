@@ -1,5 +1,5 @@
 ## Example processing module file
-# for msget v1.0.0.
+# for msget v1.1.0.
 # See msget.init.example for istructions.
 
 import csv
