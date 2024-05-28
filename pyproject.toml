@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "msget"
 version = "1.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Get Moodle stats. Archive and share them by email."
+authors = ["Matteo Savatteri <matteo.savatteri@unimi.it>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
