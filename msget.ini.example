@@ -73,3 +73,12 @@ body: Dear friend,
 
     Pizza
 ###################################################
+
+[SYSTEM]
+# This string is appended to the paths of directories
+# containing runtime generated files to allow running
+# multiple istances of msget.
+# For now the only supported dir is /var/lib/msget.
+# If instance_string is empty this configuration
+# is ignored.
+instance_string = -example-instance
