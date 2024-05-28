@@ -40,10 +40,10 @@ def main():
     # Handle configuration file
     print(
     """
-    ###############################
+    #################################
     #  msget - {date}  #
-    ###############################
-    """.format(date=datetime.today().strftime("%Y-%m-%d_%H%M%S"))
+    #################################
+    """.format(date=datetime.today().strftime("%Y-%m-%d %H:%M:%S"))
     )
 
     print("Reading configuration...")
@@ -77,7 +77,8 @@ def main():
 
             print(login_post_data)
 
-            print("\nTrying to complete login post data dictionary parsing login page...\nGetting login page for parsing...")
+            print("\nTrying to complete login post data dictionary parsing login page...")
+            print("Getting login page for parsing...")
 
             try:
                 response = session.get(config['LOGIN']['login_url'])
@@ -85,7 +86,7 @@ def main():
                 eprint("Problem getting login page: {0}".format(err))
                 sys.exit(1)
 
-            print("Login page successfully retrieved!")
+            print("Login page retrieved successfully!")
 
             soup = bs.BeautifulSoup(response.text, 'html.parser')
 
@@ -112,9 +113,11 @@ def main():
 
 
             login_cookies = requests.utils.dict_from_cookiejar(session.cookies)
-            print("Login successfull!\nSession cookies:\n\n", login_cookies)
+            print("Logged in successfully!")
+            print("Session cookies:\n")
+            print(login_cookies, "\n")
 
-    print("\nRetrieving stats file...")
+    print("Retrieving stats file...")
 
     # Try to downlaod stats file for Bibliodoc from moodle
     # https://formazioneonline.unimi.it/course/view.php?id=30
