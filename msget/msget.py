@@ -14,6 +14,9 @@ from zipfile import ZipFile, ZIP_DEFLATED
 import smtplib
 from email.message import EmailMessage
 
+import time
+
+
 def eprint(*args, **kwargs):
     """Print to stderr"""
     print(*args, file=sys.stderr, **kwargs)
@@ -53,6 +56,41 @@ def main():
 
     print("Acquired configuration parameters:\n")
     print(json.dumps({section: dict(config[section]) for section in config.sections()}, indent=4), "\n")
+
+    ### vars
+    # get times and set time variables
+
+    timestamp_file = "/var/lib/msget/timestamp"
+
+    if "instance_string" in config['SYSTEM']:
+        if config['SYSTEM']['instance_string']:
+            print("instance_string is set in config file...")
+
+            instance_string = config['SYSTEM']['instance_string']
+            timestamp_file = "/var/lib/msget" + instance_string + "/timestamp"
+
+            print("Instance string is " + instance_string)
+            print("Timestamp file path is now set to " + timestamp_file)
+
+
+    print("Retrieving last download timestamp...")
+    try:
+        timestamp_fp = open(timestamp_file, 'r')
+        timestamp = datetime.strptime(timestamp_fp.read(26),"%Y-%m-%d %H:%M:%S.%f")
+        timestamp_str = timestamp.strftime("%Y-%m-%d_%H%M%S")
+    except Exception as err:
+        eprint("Problem retrieving last download timestamp: {0}".format(err))
+        timestamp_fp.close()
+        sys.exit(1)
+
+    print("Timestamp retrieved successfully!")
+    print("Last download timestamp is " + str(timestamp))
+
+    time_now = datetime.now()
+    time_now_str = time_now.strftime("%Y-%m-%d_%H%M%S")
+
+    timestamp_fp.close()
+
 
     ### acquire report file
 
@@ -127,8 +165,6 @@ def main():
         eprint("Failed to retrieve Bibliodoc stats file: {0}".format(err))
         sys.exit(1)
 
-    time_now = datetime.now()
-    time_now_str = time_now.strftime("%Y-%m-%d_%H%M%S")
 
 
 
@@ -148,11 +184,11 @@ def main():
         if config['ARCHIVE']['process_module_dir']:
             print("Processing module dir found in config, processing retrieved content...")
 
-            sys.path.insert(0, "/usr/local/src/msget_processing_module")
+            sys.path.insert(0, config['ARCHIVE']['process_module_dir'])
             from msget_processing_function import msget_processing_function as procf
 
             try:
-                io_string_download = procf(io_string_download, time_now)
+                io_string_download = procf(io_string_download, timestamp, time_now)
             except Exception as err:
                 eprint("Failed to process content: {0}".format(err))
                 sys.exit(1)
@@ -161,7 +197,9 @@ def main():
 
     download_content = io_string_download.getvalue()
 
-    filename = "bibliodoc_stats_" + time_now_str
+    print("Saving stats file...")
+
+    filename = config['ARCHIVE']['filename'] + time_now_str
     fpath = config['ARCHIVE']['save_path'] + filename
 
     try:
@@ -177,12 +215,16 @@ def main():
 
     print("Stats file saved successfully!")
 
+
+    print("Saving retrieval timestamp...")
+
     try:
-        fp = open("/var/lib/msget/timestamp", 'w')
-        fp.write("%s" % time_now)
-        fp.close()
+        timestamp_fp = open(timestamp_file, 'w')
+        timestamp_fp.write("%s" % time_now)
+        timestamp_fp.close()
     except Exception as err:
         eprint("Failed to save retrieval timestamp: {0}".format(err))
+        sys.exit(1)
 
     print("Retrieval timestamp saved successfully!")
 
